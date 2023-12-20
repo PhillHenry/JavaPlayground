@@ -11,19 +11,15 @@ RUN set -ex && \
     apt-get update && \
     ln -s /lib /lib64 && \
     apt install -y bash tini libc6 libpam-modules krb5-user libnss3 procps && \
-    mkdir -p /opt/spark && \
-    mkdir -p /opt/spark/examples && \
-    mkdir -p /opt/spark/work-dir && \
-    touch /opt/spark/RELEASE && \
     rm /bin/sh && \
     ln -sv /bin/bash /bin/sh && \
     echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
     chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
     rm -rf /var/cache/apt/*
 
-COPY target/classes /opt/
+ADD target/classes /opt/
 
-WORKDIR /opt/classes
+WORKDIR /opt/
 
-ENTRYPOINT [ "java -cp . uk.co.odinconsultants.interrupts.PausingMain /bin/sleep 10000" ]
+ENTRYPOINT [ "java", "-cp", "/opt/", "uk.co.odinconsultants.interrupts.PausingMain",  "/bin/sleep",  "10000" ]
 
