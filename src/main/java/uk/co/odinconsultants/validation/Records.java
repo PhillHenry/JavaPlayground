@@ -1,6 +1,6 @@
 package uk.co.odinconsultants.validation;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull; // seems javax -> jakarta
 record SomeData(@NotNull(message = "Data not be null") String data) {}
 
 public class Records {
