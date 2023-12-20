@@ -1,8 +1,10 @@
-FROM ghcr.io/openzipkin/alpine:3.19.0
+FROM ghcr.io/graalvm/jdk-community:21
 
 # docker build -t javaplayground:latest -f ./Dockerfile .
 
-RUN apk add --no-cache tini
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
 
 ARG java_home=/usr/lib/jvm/java-21-openjdk
 ENV JAVA_HOME=$java_home
