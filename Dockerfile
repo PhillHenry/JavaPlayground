@@ -1,21 +1,12 @@
-ARG java_image_tag=11-jre-slim
-
-FROM openjdk:${java_image_tag}
-
-ARG spark_uid=185
+FROM ghcr.io/openzipkin/alpine:3.19.0
 
 # docker build -t javaplayground:latest -f ./Dockerfile .
 
-RUN set -ex && \
-    sed -i 's/http:\/\/deb.\(.*\)/https:\/\/deb.\1/g' /etc/apt/sources.list && \
-    apt-get update && \
-    ln -s /lib /lib64 && \
-    apt install -y bash tini libc6 libpam-modules krb5-user libnss3 procps && \
-    rm /bin/sh && \
-    ln -sv /bin/bash /bin/sh && \
-    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
-    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
-    rm -rf /var/cache/apt/*
+RUN apk add --no-cache tini
+
+ARG java_home=/usr/lib/jvm/java-21-openjdk
+ENV JAVA_HOME=$java_home
+ENV PATH=${JAVA_HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 ADD target/classes /opt/
 
