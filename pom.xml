@@ -1,0 +1,80 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.co.odinconsultants.victor</groupId>
+    <artifactId>JavaPlayground</artifactId>
+    <version>0.1</version>
+    <name>${project.artifactId}</name>
+    <description>Leverages Java's new(ish) APIs to handle vectors and matrices</description>
+    <inceptionYear>2023</inceptionYear>
+    <url>https://github.com/PhillHenry/JavaPlayground</url>
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses/</url>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/PhillHenry/Victor.git</url>
+    </scm>
+    <developers>
+        <developer>
+            <name>Phillip Henry</name>
+        </developer>
+    </developers>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <encoding>UTF-8</encoding>
+        <jmh.version>1.37</jmh.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>java21-target</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.11.0</version>
+                        <configuration>
+                            <source>${maven.compiler.source}</source>
+                            <target>${maven.compiler.target}</target>
+                            <compilerArgs>
+                                <arg>--add-exports=java.base/sun.net.util=ALL-UNNAMED</arg>
+                                <arg>--add-exports=java.management/sun.management=ALL-UNNAMED</arg>
+                                <arg>--add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED</arg>
+                                <arg>--add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED</arg>
+                                <arg>--add-modules=jdk.incubator.vector</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
