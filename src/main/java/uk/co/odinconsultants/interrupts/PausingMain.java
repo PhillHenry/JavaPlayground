@@ -15,18 +15,26 @@ public class PausingMain {
 
         if (args.length > 0) {
             var builder = new ProcessBuilder();
-            String command = Arrays.toString(args);
-            System.out.println(String.format("About to run %s", command));
-            try {
-                var process = builder.command(command).start();
-            } catch(Exception x) {
-                System.err.println(String.format("Failed to execute %s", command));
-                x.printStackTrace();
-            }
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String arguments = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                    String command = args[0];
+                    System.out.println(String.format("About to run '%s %s'", command, arguments));
+                    try {
+                        var process = builder.command(command, arguments).start();
+                        System.out.println(String.format("Command '%s' finished with exit code %d", command, process.exitValue()));
+                    } catch(Exception x) {
+                        System.err.println(String.format("Failed to execute %s", command));
+                        x.printStackTrace();
+                    }
+                }
+            }).start();
         }
 
         try {
-            Thread.sleep(Long.MAX_VALUE);
+            Thread.sleep(Long.MAX_VALUE); // kill -9 and -7 leads to no shutdown hook but SIGHUP does
         } catch (Exception x) {
             x.printStackTrace();
         }
