@@ -29,6 +29,8 @@ import com.sun.jdi.request.BreakpointRequest;
 import com.sun.jdi.request.ClassPrepareRequest;
 import com.sun.jdi.request.StepRequest;
 
+import static com.sun.jdi.request.EventRequest.SUSPEND_NONE;
+
 public class JDIExampleDebugger {
 
     private Class debugClass;
@@ -90,6 +92,7 @@ public class JDIExampleDebugger {
             Location location = classType.locationsOfLine(lineNumber).get(0);
             BreakpointRequest bpReq = vm.eventRequestManager().createBreakpointRequest(location);
             bpReq.enable();
+//            bpReq.setSuspendPolicy(SUSPEND_NONE);
         }
     }
 
@@ -103,7 +106,7 @@ public class JDIExampleDebugger {
         StackFrame stackFrame = event.thread().frame(0);
         if(stackFrame.location().toString().contains(debugClass.getName())) {
             Map<LocalVariable, Value> visibleVariables = stackFrame.getValues(stackFrame.visibleVariables());
-            System.out.println("Variables at " +stackFrame.location().toString() +  " > ");
+//            System.out.println("Variables at " +stackFrame.location().toString() +  " > ");
             for (Map.Entry<LocalVariable, Value> entry : visibleVariables.entrySet()) {
                 System.out.println(entry.getKey().name() + " = " + entry.getValue());
             }
@@ -125,11 +128,13 @@ public class JDIExampleDebugger {
 
     private static volatile boolean reading = true;
 
+    /**
+     * Note that we are dealing with EventSets so the order of events is not preserved.
+     */
     public static void main(String[] args) throws Exception {
-
         JDIExampleDebugger debuggerInstance = new JDIExampleDebugger();
-        debuggerInstance.setDebugClass(JDIExampleDebuggee.class);
-        int[] breakPoints = {9, 12};
+        debuggerInstance.setDebugClass(Incrementer.class);
+        int[] breakPoints = {12};
         debuggerInstance.setBreakPointLines(breakPoints);
 
         try {
@@ -159,22 +164,22 @@ public class JDIExampleDebugger {
 
             EventSet eventSet = null;
             while ((eventSet = vm.eventQueue().remove()) != null) {
-                System.out.println("EventSet");
+//                System.out.println("EventSet");
                 for (Event event : eventSet) {
-                    System.out.println(event);
+//                    System.out.println(event);
                     if (event instanceof ClassPrepareEvent) {
                         debuggerInstance.setBreakPoints(vm, (ClassPrepareEvent)event);
                     }
 
                     if (event instanceof BreakpointEvent) {
-                        event.request().disable();
+//                        event.request().disable();
                         debuggerInstance.displayVariables((BreakpointEvent) event);
-                        debuggerInstance.enableStepRequest(vm, (BreakpointEvent)event);
+//                        debuggerInstance.enableStepRequest(vm, (BreakpointEvent)event);
                     }
 
-                    if (event instanceof StepEvent) {
-                        debuggerInstance.displayVariables((StepEvent) event);
-                    }
+//                    if (event instanceof StepEvent) {
+//                        debuggerInstance.displayVariables((StepEvent) event);
+//                    }
                     vm.resume();
                 }
             }
