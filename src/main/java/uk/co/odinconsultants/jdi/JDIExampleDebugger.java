@@ -61,7 +61,7 @@ public class JDIExampleDebugger {
         LaunchingConnector launchingConnector = Bootstrap.virtualMachineManager().defaultConnector();
         Map<String, Connector.Argument> arguments = launchingConnector.defaultArguments();
         Connector.Argument options = arguments.get("options");
-        options.setValue("-cp /home/henryp/Code/Java/MyCode/JavaPlayground/target/classes/");
+        options.setValue("-cp " + JDIExampleDebugger.class.getClassLoader().getResource("."));
         System.out.println("arguments = " + arguments);
         arguments.get("main").setValue(debugClass.getName());
         VirtualMachine vm = launchingConnector.launch(arguments);
