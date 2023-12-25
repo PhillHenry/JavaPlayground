@@ -2,6 +2,9 @@ package uk.co.odinconsultants.interrupts;
 
 import java.util.Arrays;
 
+/**
+ * Executing `docker stop ...` means the shutdown hook runs but `docker kill` does not.
+ */
 public class PausingMain {
 
     public static void main(String[] args) {
