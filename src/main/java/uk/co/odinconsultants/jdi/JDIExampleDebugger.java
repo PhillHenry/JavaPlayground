@@ -92,7 +92,6 @@ public class JDIExampleDebugger {
             Location location = classType.locationsOfLine(lineNumber).get(0);
             BreakpointRequest bpReq = vm.eventRequestManager().createBreakpointRequest(location);
             bpReq.enable();
-//            bpReq.setSuspendPolicy(SUSPEND_NONE);
         }
     }
 
