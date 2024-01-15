@@ -9,6 +9,11 @@ public class MemoryMapMain {
 
     /**
      * Note that there are no kernel calls when reading the file (ie, in the while loop)
+     * See the kerrnel calls with:
+     * <code>
+     * sudo strace -p $(jstack $(jps | grep MemoryMapMain | awk '{print $1}')  | grep ^\"main | perl -pe s/\].*\//g | perl -pe s/.*\\[//g)
+     * </code>
+     * (Remove that second backslash in the first Perl call. I had to put it in so JavaDoc didn't complain)
      */
     public static void main(String[] args) throws Exception {
         String filename = args[0];
@@ -22,6 +27,8 @@ public class MemoryMapMain {
         // Read from memory mapped file buffer
         byte[] bytes = new byte[1024];
         int i = 0;
+        System.out.println("Channel established. About to read file. Press any key to continue.");
+        System.in.read();
         while (true) {
             if (i + bytes.length > channelSize) {
                 i = 0;
