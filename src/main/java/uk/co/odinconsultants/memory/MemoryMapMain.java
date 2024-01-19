@@ -24,7 +24,6 @@ public class MemoryMapMain {
     }
 
     private void continuallyRead(String filename) throws IOException {
-
         System.out.println("About to read file " + filename + ". Press a key");
         System.in.read();
         Path file = Path.of(filename);
@@ -54,7 +53,6 @@ public class MemoryMapMain {
         } else {
             return i;
         }
-
     }
 
     int readIntoArray(long maxIndex, ByteBuffer buffer, byte[] bytes, int index) {

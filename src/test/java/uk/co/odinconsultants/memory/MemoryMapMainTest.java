@@ -55,6 +55,9 @@ public class MemoryMapMainTest {
             System.out.println(String.format("i = %d\told = %d\tnLoops = %d", i, old, nLoops));
             if (i < old) {
                 nLoops += 1;
+                checkBytes(bytes, old, maxIndex - old);
+            } else {
+                checkBytes(bytes, old, bytes.length);
             }
         }
     }
