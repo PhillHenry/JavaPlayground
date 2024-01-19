@@ -19,26 +19,43 @@ public class MemoryMapMainTest {
         int maxIndex = bufferSize * 5;
         var bytes = new byte[bufferSize];
         ByteBuffer buffer = cyclicMonotonicallyIncreasing(maxIndex);
-        int readFirst = toTest.bufferIntoArray(maxIndex, buffer, bytes, 0);
+        int readFirst = toTest.readIntoArray(maxIndex, buffer, bytes, 0);
         assertEquals(bufferSize, readFirst);
         checkBytes(bytes, 0, readFirst);
-        int readSecond = toTest.bufferIntoArray(maxIndex, buffer, bytes, readFirst);
+        int readSecond = toTest.readIntoArray(maxIndex, buffer, bytes, readFirst);
         checkBytes(bytes, readFirst, readSecond);
         assertEquals(bufferSize * 2, readSecond + readFirst);
     }
 
     @Test
-    public void wrapReading() {
+    public void edgeCase() {
         int bufferSize = 32;
         int maxIndex = (bufferSize * 5) - 1;
         var bytes = new byte[bufferSize];
         ByteBuffer buffer = cyclicMonotonicallyIncreasing(maxIndex);
         int start = 0;
         for (int i = 0 ; i < maxIndex ; i += bufferSize) {
-            int read = toTest.bufferIntoArray(maxIndex, buffer, bytes, start);
+            int read = toTest.readIntoArray(maxIndex, buffer, bytes, start);
             System.out.println(String.format("start = %d\t read = %d\tmaxIndex = %d", start, read, maxIndex));
             checkBytes(bytes, start, read);
             start += read;
+        }
+    }
+    @Test
+    public void wrapReading() {
+        int bufferSize = 32;
+        int maxIndex = (bufferSize * 5) - 1;
+        var bytes = new byte[bufferSize];
+        ByteBuffer buffer = cyclicMonotonicallyIncreasing(maxIndex);
+        int i = 0;
+        int nLoops = 0;
+        while (nLoops < 5) {
+            int old = i;
+            i = toTest.readLooping(maxIndex, buffer, bytes, i);
+            System.out.println(String.format("i = %d\told = %d\tnLoops = %d", i, old, nLoops));
+            if (i < old) {
+                nLoops += 1;
+            }
         }
     }
 

@@ -43,22 +43,29 @@ public class MemoryMapMain {
         byte[] bytes = new byte[1024];
         int i = 0;
         while (true) {
-            i += bufferIntoArray(channelSize, buffer, bytes, i);
-            i = (int)(channelSize % bytes.length);
+            i = readLooping(channelSize, buffer, bytes, i);
         }
     }
 
-    int bufferIntoArray(long maxIndex, ByteBuffer buffer, byte[] bytes, int index) {
+    int readLooping(long channelSize, ByteBuffer buffer, byte[] bytes, int i) {
+        i += readIntoArray(channelSize, buffer, bytes, i);
+        if (i >= channelSize) {
+            return 0;
+        } else {
+            return i;
+        }
+
+    }
+
+    int readIntoArray(long maxIndex, ByteBuffer buffer, byte[] bytes, int index) {
         int read = bytes.length;
         int end = index + bytes.length;
-        if (end > maxIndex) {
+        if (end >= maxIndex) {
             read = (int) (maxIndex % bytes.length);
             buffer.get(bytes, 0, read);
-            index = 0;
             buffer.flip(); // else .BufferUnderflowException
         } else {
             buffer.get(bytes, 0, bytes.length);
-            index += bytes.length;
         }
         return read;
     }
