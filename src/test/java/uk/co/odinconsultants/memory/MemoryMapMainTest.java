@@ -19,32 +19,32 @@ public class MemoryMapMainTest {
         int maxIndex = bufferSize * 5;
         var bytes = new byte[bufferSize];
         ByteBuffer buffer = cyclicMonotonicallyIncreasing(maxIndex);
-        int newIndex = toTest.bufferIntoArray(maxIndex, buffer, bytes, 0);
-        assertEquals(bufferSize, newIndex);
-        checkBytes(bytes, 0);
-        int finalIndex = toTest.bufferIntoArray(maxIndex, buffer, bytes, newIndex);
-        checkBytes(bytes, newIndex);
-        assertEquals(bufferSize * 2, finalIndex);
+        int readFirst = toTest.bufferIntoArray(maxIndex, buffer, bytes, 0);
+        assertEquals(bufferSize, readFirst);
+        checkBytes(bytes, 0, readFirst);
+        int readSecond = toTest.bufferIntoArray(maxIndex, buffer, bytes, readFirst);
+        checkBytes(bytes, readFirst, readSecond);
+        assertEquals(bufferSize * 2, readSecond + readFirst);
     }
 
     @Test
     public void wrapReading() {
         int bufferSize = 32;
-        int maxIndex = (bufferSize * 5);
+        int maxIndex = (bufferSize * 5) - 1;
         var bytes = new byte[bufferSize];
         ByteBuffer buffer = cyclicMonotonicallyIncreasing(maxIndex);
         int start = 0;
         for (int i = 0 ; i < maxIndex ; i += bufferSize) {
-            int newIndex = toTest.bufferIntoArray(maxIndex, buffer, bytes, start);
-            System.out.println(String.format("%d\t%d", start, newIndex));
-            checkBytes(bytes, start);
-            start = newIndex;
+            int read = toTest.bufferIntoArray(maxIndex, buffer, bytes, start);
+            System.out.println(String.format("start = %d\t read = %d\tmaxIndex = %d", start, read, maxIndex));
+            checkBytes(bytes, start, read);
+            start += read;
         }
     }
 
-    private void checkBytes(byte[] bytes, int start) {
+    private void checkBytes(byte[] bytes, int start, int length) {
         byte b = (byte) (start % 256);
-        for (int i = 0; i < bytes.length; i++) {
+        for (int i = 0; i < length; i++) {
             MatcherAssert.assertThat("index = " + i, bytes[i], is(equalTo(b)));
             b += 1;
         }
