@@ -1,5 +1,7 @@
 package uk.co.odinconsultants.memory;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
@@ -17,6 +19,12 @@ public class MemoryMapMain {
      */
     public static void main(String[] args) throws Exception {
         String filename = args[0];
+        var app = new MemoryMapMain();
+        app.continuallyRead(filename);
+    }
+
+    private void continuallyRead(String filename) throws IOException {
+
         System.out.println("About to read file " + filename + ". Press a key");
         System.in.read();
         Path file = Path.of(filename);
@@ -25,19 +33,27 @@ public class MemoryMapMain {
         System.out.println("channelSize = " + channelSize);
         MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channelSize);
         // Read from memory mapped file buffer
-        byte[] bytes = new byte[1024];
-        int i = 0;
+
         System.out.println("Channel established. About to read file. Press any key to continue.");
         System.in.read();
+        continuallyRead(channelSize, buffer);
+    }
+
+    private void continuallyRead(long channelSize, MappedByteBuffer buffer) {
+        byte[] bytes = new byte[1024];
+        int i = 0;
         while (true) {
-            if (i + bytes.length > channelSize) {
-                i = 0;
-                buffer.flip();
-//                System.out.print("#");
-            }
-//            System.out.print(".");
-            buffer.get(bytes, 0, bytes.length);
-            i += bytes.length;
+            i = bufferIntoArray(channelSize, buffer, bytes, i);
         }
+    }
+
+    int bufferIntoArray(long maxIndex, ByteBuffer buffer, byte[] bytes, int index) {
+        if (index + bytes.length > maxIndex) {
+            index = 0;
+            buffer.flip();
+        }
+        buffer.get(bytes, 0, bytes.length);
+        index += bytes.length;
+        return index;
     }
 }
