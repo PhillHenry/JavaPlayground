@@ -12,7 +12,13 @@ import java.util.Random;
 @State(Scope.Group)
 public class JMH_CacheHits {
 
-    @Param({"1024"})
+    /**
+     * Run
+     * sudo dmidecode -t cache
+     * to show the caches in your system.
+     * These settings are for my L1, L2 and L3 (divided by 8 as the array is of 64-bit longs)
+     */
+    @Param({"64000", "256000", "2048000",})
     volatile public int n;
     private static Random random = new Random();
     public static long[] createRandomVector(int n) {

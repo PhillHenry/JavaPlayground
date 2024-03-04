@@ -100,7 +100,7 @@
                         </goals>
                         <configuration>
                             <classpathScope>test</classpathScope>
-                            <executable>/home/henryp/Code/Java/Victor/bin/java</executable>
+<!--                            <executable>/home/henryp/Code/Java/Victor/bin/java</executable>-->
                             <arguments>
                                 <argument>--classpath</argument>
                                 <classpath />
