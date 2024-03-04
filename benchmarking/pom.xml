@@ -100,9 +100,9 @@
                         </goals>
                         <configuration>
                             <classpathScope>test</classpathScope>
-<!--                            <executable>/home/henryp/Code/Java/Victor/bin/java</executable>-->
+                            <executable>java</executable>
                             <arguments>
-                                <argument>--classpath</argument>
+                                <argument>-classpath</argument>
                                 <classpath />
                                 <argument>org.openjdk.jmh.Main</argument>
                             </arguments>

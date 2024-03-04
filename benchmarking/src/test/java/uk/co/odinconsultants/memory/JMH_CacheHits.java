@@ -42,8 +42,8 @@ public class JMH_CacheHits {
 
     @Benchmark
     @Group
-    public void usingPlainOldJava() {
-        acc = acc ^ x[java.lang.Math.abs(random.nextInt()) % n];
+    public void randomAccess() {
+        acc = acc ^ x[random.nextInt(n)];
     }
 
     long doNotOptimizeAway() {
@@ -52,7 +52,7 @@ public class JMH_CacheHits {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(JMH_CacheHits.class.getSimpleName())
+                .include(JMH_CacheHits.class.getSimpleName()).warmupIterations(3).measurementIterations(3)
                 .forks(1)
                 .build();
 
