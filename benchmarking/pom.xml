@@ -104,6 +104,7 @@
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath />
+                                <argument>-Xmx16g</argument>
                                 <argument>org.openjdk.jmh.Main</argument>
                             </arguments>
                         </configuration>
