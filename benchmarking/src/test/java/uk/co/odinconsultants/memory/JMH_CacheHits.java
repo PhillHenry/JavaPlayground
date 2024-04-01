@@ -65,7 +65,7 @@ Cache Information
 	Associativity: 16-way Set-associative</pre>
      * These settings are for my L1, L2 and L3 (divided by 8 as the array is of 64-bit longs)
      */
-    @Param({"32000", "64000", "128000", "256000", "1024000", "2048000", "4096000",})
+    @Param({"16", "128"})
     volatile public int n;
     private static Random random = new Random();
     public static long[] createRandomVector(int n) {

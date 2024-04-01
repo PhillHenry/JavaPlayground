@@ -39,7 +39,7 @@ def plot_results(results: [Result]):
     plt.errorbar(xs_log, ys, yerr=errors_log, capsize=5, fmt="r--.", ecolor = "black")
     plt.xlabel("Array size (log10)")
     plt.ylabel("Ops/second (10 millions)")
-    plt.title("Array access throughput")
+    plt.title("Read throughput of an Array of 64-bit numbers")
     plt.show()
 
 
