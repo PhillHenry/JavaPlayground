@@ -69,6 +69,7 @@
                                 <arg>--add-exports=java.rmi/sun.rmi.registry=ALL-UNNAMED</arg>
                                 <arg>--add-exports=java.security.jgss/sun.security.krb5=ALL-UNNAMED</arg>
                                 <arg>--add-modules=jdk.incubator.vector</arg>
+                                <arg>--enable-preview</arg>
                             </compilerArgs>
                         </configuration>
                     </plugin>
