@@ -7,9 +7,14 @@ import java.lang.foreign.MemorySegment;
 public class NewUnsafeMain {
 
     public static void main(String[] args) throws IOException {
-        MemorySegment memorySegment = Arena.global().allocate(1024, 8);
+        waitForKeyPress();
+        MemorySegment memorySegment = Arena.global().allocate(1024 * 1024 * 128, 8);
         long address = memorySegment.address();
         System.out.println(address);
+        waitForKeyPress();
+    }
+
+    private static void waitForKeyPress() throws IOException {
         System.out.println("Press a key");
         System.in.read();
     }
