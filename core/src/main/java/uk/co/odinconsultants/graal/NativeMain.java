@@ -4,7 +4,7 @@ public class NativeMain {
 
     public static void printAndSleep(String msg, long sleepMs) {
         try {
-            System.out.println("Thread 1");
+            System.out.println(msg);
             Thread.currentThread().sleep(sleepMs);
         } catch (InterruptedException e) {
             e.printStackTrace();
